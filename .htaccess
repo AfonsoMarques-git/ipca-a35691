@@ -1,0 +1,4 @@
+# Redirect index.html to maintenance.html
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/index\.html$ [NC]
+RewriteRule ^(.*)$ /manutencao.html [R=301,L]

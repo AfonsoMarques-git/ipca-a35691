@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="./css/style.css">
 </head>
@@ -13,19 +12,71 @@
 <body>
     <header>
         <div class="logo">
-            <img src="./images/logo.png" alt="Logo">
+            <a href="index.html">
+                <img src="./images/logo.png" alt="Logo">
+            </a>
         </div>
         <nav class="menu">
             <ul>
-                <li>Home</li>
+                <li><a href="">Home</a></li>
                 <li><a href="">About</a></li>
                 <li><a href="">Contact</a></li>
                 <li><a href="">Portfolio</a></li>
             </ul>
         </nav>
     </header>
-    <div class="division"><hr></div>
-    <div class="main-container"></div>
+    <div class="division">
+        <hr>
+    </div>
+    <div class="main-container">
+        <div class="hero-section">
+            <h1 class="hero-section-title">Visual</h1>
+            <h1 class="hero-section-title">
+                Design
+                <img class="hero-section-icon" src="./images/triangle-icon-2.svg" alt="">
+            </h1>
+            <h1 class="hero-section-title">
+                <img class="hero-section-icon" src="./images/plus-icon-2.svg" alt="">
+                Digital
+            </h1>
+            <h1 class="hero-section-title">Thinking
+                <img class="hero-section-icon" src="./images/triangle-icon-2.svg" alt="">
+                <img class="hero-section-icon" src="./images/arrow-down-icon-2.svg" alt="">
+            </h1>
+        </div>
+
+        <div class="works-section" id="works-section">
+            
+        </div>
+    </div>
+    <script>
+        fetch('./main-page-works.json')
+        .then(response => response.json())
+        .then(data => {
+            const worksSection = document.getElementById('works-section');
+            data.works.forEach(work => {
+                const workItem = document.createElement('section');
+                workItem.className = 'work-item';
+
+                const img = document.createElement('img');
+                img.src = work.image;
+                img.alt = work.title;
+
+                const title = document.createElement('h3');
+                title.textContent = work.title;
+
+                const description = document.createElement('p');
+                description.textContent = work.description;
+
+                workItem.appendChild(img);
+                workItem.appendChild(document.createElement('hr'));
+                workItem.appendChild(title);
+                workItem.appendChild(description);
+
+                worksSection.appendChild(workItem);
+            });
+        });
+    </script>
 </body>
 
 </html>
