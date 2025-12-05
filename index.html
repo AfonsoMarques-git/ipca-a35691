@@ -25,9 +25,11 @@
             </ul>
         </nav>
     </header>
+
     <div class="division">
         <hr>
     </div>
+
     <div class="main-container">
         <div class="hero-section">
             <h1 class="hero-section-title">Visual</h1>
@@ -41,40 +43,99 @@
             </h1>
             <h1 class="hero-section-title">Thinking
                 <img class="hero-section-icon" src="./images/triangle-icon-2.svg" alt="">
-                <img class="hero-section-icon" src="./images/arrow-down-icon-2.svg" alt="">
+                <a href="#works-section"><img class="hero-section-icon" src="./images/arrow-down-icon-2.svg" alt=""></a>
             </h1>
         </div>
 
         <div class="works-section" id="works-section">
-            
+            <!-- Works will be dynamically loaded here -->
+        </div>
+        <div class="see-more">
+            <h1>See More</h1>
+            <a href=""><img src="./images/plus-icon-2.svg" alt=""></a>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-content">
+            <img src="./images/logo.png" alt="Logo">
+            <div class="social-media">
+                <a href="https://instagram.com/afonso_lm2" target="_blank"><img src="./images/instagram-icon.svg" alt="Instagram"></a>
+                <a href="https://wa.me/351910604498" target="_blank"><img src="./images/whatsapp-icon.svg" alt="WhatsApp"></a>
+            </div>
+        </div>
+        <div class="footer-base">
+            <p>&copy; 2024 Afonso Marques. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script>
-        fetch('./main-page-works.json')
-        .then(response => response.json())
-        .then(data => {
+        document.addEventListener('DOMContentLoaded', () => {
             const worksSection = document.getElementById('works-section');
-            data.works.forEach(work => {
-                const workItem = document.createElement('section');
-                workItem.className = 'work-item';
 
-                const img = document.createElement('img');
-                img.src = work.image;
-                img.alt = work.title;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
 
-                const title = document.createElement('h3');
-                title.textContent = work.title;
+            fetch('./main-page-works.json')
+                .then(response => response.json())
+                .then(data => {
+                    data.works.forEach((work, idx) => {
+                        const workItem = document.createElement('section');
+                        workItem.className = 'work-item';
+                        workItem.style.animationDelay = `${0.1 * (idx + 1)}s`;
 
-                const description = document.createElement('p');
-                description.textContent = work.description;
+                        const imageDiv = document.createElement('div');
+                        imageDiv.className = 'work-image';
+                        const img = document.createElement('img');
+                        img.src = work.image;
+                        img.alt = work.title;
+                        imageDiv.appendChild(img);
 
-                workItem.appendChild(img);
-                workItem.appendChild(document.createElement('hr'));
-                workItem.appendChild(title);
-                workItem.appendChild(description);
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'work-content';
+                        const hr = document.createElement('hr');
+                        const number = document.createElement('span');
+                        number.textContent = work.number;
+                        const title = document.createElement('h3');
+                        title.textContent = work.title;
+                        const description = document.createElement('p');
+                        description.textContent = work.description;
+                        const direction = document.createElement('img');
+                        direction.src = work.direction;
 
-                worksSection.appendChild(workItem);
-            });
+                        contentDiv.appendChild(hr);
+                        contentDiv.appendChild(number);
+                        contentDiv.appendChild(title);
+                        contentDiv.appendChild(description);
+                        contentDiv.appendChild(direction);
+
+                        workItem.appendChild(imageDiv);
+                        workItem.appendChild(contentDiv);
+                        worksSection.appendChild(workItem);
+
+                        observer.observe(workItem);
+                    });
+
+                    const seeMore = document.querySelector('.see-more');
+                    if (seeMore) {
+                        seeMore.style.animationDelay = `${0.1 * (data.works.length + 1)}s`;
+                        observer.observe(seeMore);
+                    }
+                });
+
+            const scrollLink = document.querySelector('.scroll-link');
+            if (scrollLink) {
+                scrollLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    worksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
         });
     </script>
 </body>
